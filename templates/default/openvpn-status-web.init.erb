@@ -1,0 +1,43 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          openvpn-status-web
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Handle openvpn-status-web gem
+### END INIT INFO
+
+# using the system ruby's gem binaries directory
+DAEMON="<%= @daemon %>"
+
+CONFIG_FILE="/opt/openvpn-status-web/config.yaml"
+
+DAEMON_OPTS="$CONFIG_FILE"
+
+test -x $DAEMON || exit 0
+
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+    log_daemon_msg "Starting openvpn-web-status" "openvpn-web-status"
+    start-stop-daemon --start --quiet --oknodo --make-pidfile --pidfile "/var/run/openvpn-web-status.pid" --background --exec $DAEMON -- $DAEMON_OPTS
+    log_end_msg $?
+    ;;
+  stop)
+    log_daemon_msg "Stopping openvpn-web-status" "openvpn-web-status"
+    start-stop-daemon --stop --quiet --oknodo --pidfile "/var/run/openvpn-web-status.pid"
+    log_end_msg $?
+    ;;
+  restart|force-reload)
+    log_daemon_msg "Restarting openvpn-web-status" "openvpn-web-status"
+    start-stop-daemon --stop --quiet --oknodo --retry 30 --pidfile "/var/run/openvpn-web-status.pid"
+    start-stop-daemon --start --quiet --oknodo --make-pidfile --pidfile "/var/run/openvpn-web-status.pid" --background --exec $DAEMON -- $DAEMON_OPTS
+    log_end_msg $?
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+    exit 1
+    ;;
+esac
