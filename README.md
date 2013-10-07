@@ -4,7 +4,7 @@
 
 ## Description
 
-Install openvpn-status-web as gem and configures it from `node['openvpn-status-web']['config']`.
+Installs [openvpn-status-web](https://github.com/cmur2/openvpn-status-web) as gem and configures it from `node['openvpn-status-web']['config']`.
 
 ## Usage
 
