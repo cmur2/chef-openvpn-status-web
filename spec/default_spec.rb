@@ -1,4 +1,5 @@
 require 'chefspec'
+begin require 'chefspec/deprecations'; rescue LoadError; end
 
 describe 'openvpn-status-web::default' do
   let(:chef_runner) do
